@@ -1,0 +1,159 @@
+==================
+Subquery in from
+==================
+<mapper>
+  <select id="fromSub">
+    SELECT t.id FROM (SELECT id FROM orders GROUP BY id) t
+  </select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (object_reference
+                  (identifier))
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (subquery
+              (select
+                (keyword_select)
+                (select_expression
+                  (term
+                    (field
+                      (identifier)))))
+              (from
+                (keyword_from)
+                (relation
+                  (object_reference
+                    (identifier))))
+              (group_by
+                (keyword_group)
+                (keyword_by)
+                (field
+                  (identifier))))
+            (identifier))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Subquery in where
+==================
+<mapper>
+  <select id="whereSub">
+    SELECT id FROM users WHERE id IN (SELECT user_id FROM blocked_users)
+  </select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (where
+          (keyword_where)
+          (binary_expression
+            (field
+              (identifier))
+            (keyword_in)
+            (subquery
+              (select
+                (keyword_select)
+                (select_expression
+                  (term
+                    (field
+                      (identifier)))))
+              (from
+                (keyword_from)
+                (relation
+                  (object_reference
+                    (identifier))))))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Subquery with not in
+==================
+<mapper>
+  <select id="notInSub">
+    SELECT id FROM users WHERE id NOT IN (SELECT user_id FROM blocked_users)
+  </select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (where
+          (keyword_where)
+          (binary_expression
+            (field
+              (identifier))
+            (keyword_not)
+            (keyword_in)
+            (subquery
+              (select
+                (keyword_select)
+                (select_expression
+                  (term
+                    (field
+                      (identifier)))))
+              (from
+                (keyword_from)
+                (relation
+                  (object_reference
+                    (identifier))))))))
+      (Name))
+    (MapperETag
+      (Name))))

@@ -1,0 +1,100 @@
+==================
+Empty mapper element
+==================
+<mapper></mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Mapper namespace attribute
+==================
+<mapper namespace="UserMapper"></mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue)))
+    (MapperETag
+      (Name))))
+
+==================
+iBATIS sqlMap element
+==================
+<sqlMap namespace="UserDAO"></sqlMap>
+---
+
+(document
+  (SqlMap
+    (SqlMapSTag
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue)))
+    (SqlMapETag
+      (Name))))
+
+==================
+Unknown element inside mapper
+==================
+<mapper>
+  <extension name="custom">SELECT 1</extension>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (element
+      (STag
+        (Name)
+        (Attribute
+          (Name)
+          (AttValue)))
+      (content
+        (CharData))
+      (ETag
+        (Name)))
+    (MapperETag
+      (Name))))
+
+==================
+Nested unknown elements
+==================
+<mapper>
+  <outer enabled="true"><nested>SELECT 1</nested></outer>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (element
+      (STag
+        (Name)
+        (Attribute
+          (Name)
+          (AttValue)))
+      (content
+        (element
+          (STag
+            (Name))
+          (content
+            (CharData))
+          (ETag
+            (Name))))
+      (ETag
+        (Name)))
+    (MapperETag
+      (Name))))

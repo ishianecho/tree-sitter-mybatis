@@ -1,0 +1,178 @@
+==================
+Inner join
+==================
+<mapper>
+  <select id="inner">SELECT u.id FROM users u INNER JOIN orders o ON u.id = o.user_id</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (object_reference
+                  (identifier))
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))
+            (identifier))
+          (join
+            (keyword_inner)
+            (keyword_join)
+            (relation
+              (object_reference
+                (identifier))
+              (identifier))
+            (keyword_on)
+            (binary_expression
+              (field
+                (object_reference
+                  (identifier))
+                (identifier))
+              (field
+                (object_reference
+                  (identifier))
+                (identifier))))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Left join without modifier
+==================
+<mapper>
+  <select id="plain">SELECT u.id FROM users u JOIN roles r ON u.id = r.user_id</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (object_reference
+                  (identifier))
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))
+            (identifier))
+          (join
+            (keyword_join)
+            (relation
+              (object_reference
+                (identifier))
+              (identifier))
+            (keyword_on)
+            (binary_expression
+              (field
+                (object_reference
+                  (identifier))
+                (identifier))
+              (field
+                (object_reference
+                  (identifier))
+                (identifier))))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Chained joins with aliases
+==================
+<mapper>
+  <select id="chain">
+    SELECT o.id FROM orders o
+    LEFT JOIN customers c ON o.customer_id = c.id
+    LEFT JOIN addresses a ON c.address_id = a.id
+  </select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (object_reference
+                  (identifier))
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))
+            (identifier))
+          (join
+            (keyword_left)
+            (keyword_join)
+            (relation
+              (object_reference
+                (identifier))
+              (identifier))
+            (keyword_on)
+            (binary_expression
+              (field
+                (object_reference
+                  (identifier))
+                (identifier))
+              (field
+                (object_reference
+                  (identifier))
+                (identifier))))
+          (join
+            (keyword_left)
+            (keyword_join)
+            (relation
+              (object_reference
+                (identifier))
+              (identifier))
+            (keyword_on)
+            (binary_expression
+              (field
+                (object_reference
+                  (identifier))
+                (identifier))
+              (field
+                (object_reference
+                  (identifier))
+                (identifier))))))
+      (Name))
+    (MapperETag
+      (Name))))

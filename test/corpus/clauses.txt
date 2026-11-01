@@ -1,0 +1,435 @@
+==================
+Order by descending
+==================
+<mapper>
+  <select id="newest">SELECT id FROM users ORDER BY created_at DESC</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (order_by
+          (keyword_order)
+          (keyword_by)
+          (ordering_term
+            (field
+              (identifier))
+            (keyword_desc))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Order by multiple terms
+==================
+<mapper>
+  <select id="sorted">SELECT id FROM users ORDER BY status ASC, created_at DESC, id</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (order_by
+          (keyword_order)
+          (keyword_by)
+          (ordering_term
+            (field
+              (identifier))
+            (keyword_asc))
+          (ordering_term
+            (field
+              (identifier))
+            (keyword_desc))
+          (ordering_term
+            (field
+              (identifier)))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Group by with having
+==================
+<mapper>
+  <select id="byStatus">SELECT status, COUNT(*) FROM users GROUP BY status HAVING COUNT(*) > 5</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))
+            (term
+              (invocation
+                (object_reference
+                  (identifier))
+                (all_fields)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (group_by
+          (keyword_group)
+          (keyword_by)
+          (field
+            (identifier))
+          (keyword_having)
+          (binary_expression
+            (invocation
+              (object_reference
+                (identifier))
+              (all_fields))
+            (literal))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Limit with offset keyword
+==================
+<mapper>
+  <select id="page">SELECT id FROM users ORDER BY id LIMIT 100 OFFSET 10</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (order_by
+          (keyword_order)
+          (keyword_by)
+          (ordering_term
+            (field
+              (identifier))))
+        (limit
+          (keyword_limit)
+          (literal)
+          (keyword_offset)
+          (literal)))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Limit with comma pair
+==================
+<mapper>
+  <select id="mysqlPage">SELECT id FROM users LIMIT 10, 20</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (limit
+          (keyword_limit)
+          (literal)
+          (literal)))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Union
+==================
+<mapper>
+  <select id="union">
+    SELECT id FROM users WHERE status = 'a'
+    UNION
+    SELECT id FROM users WHERE status = 'b'
+  </select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (where
+          (keyword_where)
+          (binary_expression
+            (field
+              (identifier))
+            (literal)))
+        (set_operation
+          (keyword_union)
+          (select
+            (keyword_select)
+            (select_expression
+              (term
+                (field
+                  (identifier)))))
+          (from
+            (keyword_from)
+            (relation
+              (object_reference
+                (identifier))))
+          (where
+            (keyword_where)
+            (binary_expression
+              (field
+                (identifier))
+              (literal)))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Union all
+==================
+<mapper>
+  <select id="unionAll">
+    SELECT id FROM users WHERE status = 'a'
+    UNION ALL
+    SELECT id FROM users WHERE status = 'b'
+  </select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (where
+          (keyword_where)
+          (binary_expression
+            (field
+              (identifier))
+            (literal)))
+        (set_operation
+          (keyword_union)
+          (keyword_all)
+          (select
+            (keyword_select)
+            (select_expression
+              (term
+                (field
+                  (identifier)))))
+          (from
+            (keyword_from)
+            (relation
+              (object_reference
+                (identifier))))
+          (where
+            (keyword_where)
+            (binary_expression
+              (field
+                (identifier))
+              (literal)))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Clauses after where element
+==================
+<mapper>
+  <select id="dynamicTail">
+    SELECT o.id FROM orders o
+    <where>
+      <if test="mine">o.owner = #{me}</if>
+    </where>
+    GROUP BY o.id
+    HAVING SUM(o.amount) &gt; #{threshold}
+    ORDER BY o.created_at DESC
+    LIMIT 100 OFFSET #{pageStart}
+  </select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (object_reference
+                  (identifier))
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))
+            (identifier))))
+      (WhereElem
+        (Name)
+        (IfElem
+          (Name)
+          (Attribute
+            (Name)
+            (AttValue))
+          (select_expression
+            (term
+              (binary_expression
+                (field
+                  (object_reference
+                    (identifier))
+                  (identifier))
+                (literal))))
+          (Name))
+        (Name))
+      (group_by
+        (keyword_group)
+        (keyword_by)
+        (field
+          (object_reference
+            (identifier))
+          (identifier))
+        (keyword_having)
+        (binary_expression
+          (invocation
+            (object_reference
+              (identifier))
+            (field
+              (object_reference
+                (identifier))
+              (identifier)))
+          (literal)))
+      (order_by
+        (keyword_order)
+        (keyword_by)
+        (ordering_term
+          (field
+            (object_reference
+              (identifier))
+            (identifier))
+          (keyword_desc)))
+      (limit
+        (keyword_limit)
+        (literal)
+        (keyword_offset)
+        (literal))
+      (Name))
+    (MapperETag
+      (Name))))

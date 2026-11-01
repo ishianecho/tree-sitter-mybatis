@@ -1,0 +1,597 @@
+==================
+Logical operators
+==================
+<mapper>
+  <select id="logic">SELECT id FROM users WHERE a = 1 AND b = 2 OR c = 3</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (where
+          (keyword_where)
+          (binary_expression
+            (binary_expression
+              (binary_expression
+                (binary_expression
+                  (binary_expression
+                    (field
+                      (identifier))
+                    (literal))
+                  (keyword_and)
+                  (field
+                    (identifier)))
+                (literal))
+              (keyword_or)
+              (field
+                (identifier)))
+            (literal))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Comparison operators
+==================
+<mapper>
+  <select id="compare">SELECT id FROM users WHERE a != 1 AND b <> 2 AND c <= 3 AND d >= 4</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (where
+          (keyword_where)
+          (binary_expression
+            (binary_expression
+              (binary_expression
+                (binary_expression
+                  (binary_expression
+                    (binary_expression
+                      (binary_expression
+                        (field
+                          (identifier))
+                        (literal))
+                      (keyword_and)
+                      (field
+                        (identifier)))
+                    (literal))
+                  (keyword_and)
+                  (field
+                    (identifier)))
+                (literal))
+              (keyword_and)
+              (field
+                (identifier)))
+            (literal))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Arithmetic operators
+==================
+<mapper>
+  <select id="math">SELECT a + b, a - b, a * b, a / b, a % b FROM users</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (binary_expression
+                (field
+                  (identifier))
+                (field
+                  (identifier))))
+            (term
+              (binary_expression
+                (field
+                  (identifier))
+                (field
+                  (identifier))))
+            (term
+              (binary_expression
+                (field
+                  (identifier))
+                (field
+                  (identifier))))
+            (term
+              (binary_expression
+                (field
+                  (identifier))
+                (field
+                  (identifier))))
+            (term
+              (binary_expression
+                (field
+                  (identifier))
+                (field
+                  (identifier))))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+String concatenation
+==================
+<mapper>
+  <select id="concatOp">SELECT a || b FROM users</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (binary_expression
+                (field
+                  (identifier))
+                (field
+                  (identifier))))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Like operator
+==================
+<mapper>
+  <select id="like">SELECT id FROM users WHERE name LIKE '%son'</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (where
+          (keyword_where)
+          (binary_expression
+            (field
+              (identifier))
+            (keyword_like)
+            (literal))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Not like operator
+==================
+<mapper>
+  <select id="notLike">SELECT id FROM users WHERE name NOT LIKE '%spam%'</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (where
+          (keyword_where)
+          (binary_expression
+            (field
+              (identifier))
+            (keyword_not)
+            (keyword_like)
+            (literal))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+In list
+==================
+<mapper>
+  <select id="inList">SELECT id FROM users WHERE status IN ('a', 'b', 'c')</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (where
+          (keyword_where)
+          (binary_expression
+            (field
+              (identifier))
+            (keyword_in)
+            (list
+              (literal)
+              (literal)
+              (literal)))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Between range
+==================
+<mapper>
+  <select id="between">SELECT id FROM users WHERE age BETWEEN 18 AND 65</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (where
+          (keyword_where)
+          (binary_expression
+            (binary_expression
+              (field
+                (identifier))
+              (keyword_between)
+              (literal))
+            (keyword_and)
+            (literal))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Is null and is not null
+==================
+<mapper>
+  <select id="nulls">SELECT id FROM users WHERE deleted_at IS NULL AND note IS NOT NULL</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (where
+          (keyword_where)
+          (binary_expression
+            (binary_expression
+              (binary_expression
+                (field
+                  (identifier))
+                (keyword_is)
+                (literal
+                  (keyword_null)))
+              (keyword_and)
+              (field
+                (identifier)))
+            (keyword_is)
+            (unary_expression
+              (keyword_not)
+              (literal
+                (keyword_null))))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Entity-escaped operators
+==================
+<mapper>
+  <select id="entities">SELECT id FROM users WHERE age &gt;= 18 AND rank &lt; 10 AND status &lt;&gt; 'x'</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (where
+          (keyword_where)
+          (binary_expression
+            (binary_expression
+              (binary_expression
+                (binary_expression
+                  (binary_expression
+                    (field
+                      (identifier))
+                    (literal))
+                  (keyword_and)
+                  (field
+                    (identifier)))
+                (literal))
+              (keyword_and)
+              (field
+                (identifier)))
+            (literal))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+CDATA-wrapped operator
+==================
+<mapper>
+  <select id="cdataOp">SELECT id FROM users WHERE age <![CDATA[ < ]]> 100</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (where
+          (keyword_where)
+          (binary_expression
+            (field
+              (identifier))
+            (literal))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Boolean literals
+==================
+<mapper>
+  <select id="booleans">SELECT id FROM users WHERE deleted = false AND locked = true</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (where
+          (keyword_where)
+          (binary_expression
+            (binary_expression
+              (binary_expression
+                (field
+                  (identifier))
+                (literal
+                  (keyword_false)))
+              (keyword_and)
+              (field
+                (identifier)))
+            (literal
+              (keyword_true)))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Unary not
+==================
+<mapper>
+  <select id="negated">SELECT id FROM users WHERE NOT deleted</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (where
+          (keyword_where)
+          (unary_expression
+            (keyword_not)
+            (field
+              (identifier)))))
+      (Name))
+    (MapperETag
+      (Name))))

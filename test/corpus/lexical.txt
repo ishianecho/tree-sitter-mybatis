@@ -1,0 +1,231 @@
+==================
+Integer literals
+==================
+<mapper>
+  <select id="ints">SELECT 42, 0x1F, 0b1010, 1e3 FROM users</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (literal))
+            (term
+              (literal))
+            (term
+              (literal))
+            (term
+              (literal))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Decimal literals
+==================
+<mapper>
+  <select id="decimals">SELECT 1.25, .5, 2., 1.5e-3 FROM users</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (literal))
+            (term
+              (literal))
+            (term
+              (literal))
+            (term
+              (literal))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+String literals with escaped quotes
+==================
+<mapper>
+  <select id="strings">SELECT 'it''s', "double", &quot;quoted&quot; FROM users</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (literal))
+            (term
+              (literal))
+            (term
+              (literal))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Line comment
+==================
+<mapper>
+  <select id="line">SELECT id FROM users -- trailing comment
+    WHERE id = 1</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (comment)
+        (where
+          (keyword_where)
+          (binary_expression
+            (field
+              (identifier))
+            (literal))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Block comment inside statement
+==================
+<mapper>
+  <select id="block">SELECT id /* chosen column */ FROM users WHERE id = 1</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (comment)
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (where
+          (keyword_where)
+          (binary_expression
+            (field
+              (identifier))
+            (literal))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Current timestamp keyword
+==================
+<mapper>
+  <update id="touch">UPDATE users SET touched = CURRENT_TIMESTAMP WHERE id = 1</update>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (UpdElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (update
+          (keyword_update)
+          (relation
+            (object_reference
+              (identifier)))
+          (keyword_set)
+          (assignment
+            (field
+              (identifier))
+            (literal
+              (keyword_current_timestamp))))
+        (where
+          (keyword_where)
+          (binary_expression
+            (field
+              (identifier))
+            (literal))))
+      (Name))
+    (MapperETag
+      (Name))))

@@ -1,0 +1,107 @@
+==================
+CDATA-wrapped select
+==================
+<mapper>
+  <select id="cdata"><![CDATA[ SELECT id FROM users WHERE age < 18 ]]></select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (CDSect
+        (CDStart)
+        (CData
+          (statement
+            (select
+              (keyword_select)
+              (select_expression
+                (term
+                  (field
+                    (identifier)))))
+            (from
+              (keyword_from)
+              (relation
+                (object_reference
+                  (identifier))))
+            (where
+              (keyword_where)
+              (binary_expression
+                (field
+                  (identifier))
+                (literal))))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Empty CDATA section
+==================
+<mapper>
+  <delete id="emptyCdata"><![CDATA[ ]]></delete>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (DelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (CDSect
+        (CDStart))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+CDATA with trailing comment
+==================
+<mapper>
+  <select id="withComment"><![CDATA[ SELECT id FROM users WHERE age < 18 /* filtered */ ]]></select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (CDSect
+        (CDStart)
+        (CData
+          (statement
+            (select
+              (keyword_select)
+              (select_expression
+                (term
+                  (field
+                    (identifier)))))
+            (from
+              (keyword_from)
+              (relation
+                (object_reference
+                  (identifier))))
+            (where
+              (keyword_where)
+              (binary_expression
+                (field
+                  (identifier))
+                (literal)))))
+        (comment))
+      (Name))
+    (MapperETag
+      (Name))))

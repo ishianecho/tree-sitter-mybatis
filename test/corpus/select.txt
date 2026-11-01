@@ -1,0 +1,187 @@
+==================
+Select all columns
+==================
+<mapper>
+  <select id="all">SELECT * FROM users</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (all_fields))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Select qualified star
+==================
+<mapper>
+  <select id="qualified">SELECT u.* FROM users u</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (all_fields
+                (object_reference
+                  (identifier))))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))
+            (identifier))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Select column list with aliases
+==================
+<mapper>
+  <select id="aliases">SELECT id AS userId, name userName FROM users</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier))
+              (keyword_as)
+              (identifier))
+            (term
+              (field
+                (identifier))
+              (identifier))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Select distinct
+==================
+<mapper>
+  <select id="distinct">SELECT DISTINCT city FROM customers</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (keyword_distinct)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Select with include fragment
+==================
+<mapper>
+  <sql id="cols">id, name</sql>
+  <select id="withInclude">SELECT <include refid="cols"/> FROM users</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SqlElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (select_expression
+        (term
+          (field
+            (identifier)))
+        (term
+          (field
+            (identifier))))
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (IncludeElem
+            (Name)
+            (Attribute
+              (Name)
+              (AttValue))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)))))
+      (Name))
+    (MapperETag
+      (Name))))

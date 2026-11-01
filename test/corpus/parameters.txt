@@ -1,0 +1,228 @@
+==================
+Hash parameter
+==================
+<mapper>
+  <select id="hash">SELECT id FROM users WHERE id = #{id}</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (where
+          (keyword_where)
+          (binary_expression
+            (field
+              (identifier))
+            (literal))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Dollar parameter
+==================
+<mapper>
+  <select id="dollar">SELECT * FROM ${table}</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (all_fields))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+iBATIS delimited parameter
+==================
+<sqlMap>
+  <select id="ibatis">SELECT * FROM users WHERE id = #id#</select>
+</sqlMap>
+---
+
+(document
+  (SqlMap
+    (SqlMapSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (all_fields))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (where
+          (keyword_where)
+          (binary_expression
+            (field
+              (identifier))
+            (literal))))
+      (Name))
+    (SqlMapETag
+      (Name))))
+
+==================
+Qualified parameter property path
+==================
+<mapper>
+  <select id="qualified">SELECT id FROM users WHERE id = #{user.profile.id}</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (where
+          (keyword_where)
+          (binary_expression
+            (field
+              (identifier))
+            (literal
+              (field)
+              (field)
+              (field)))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Parameter with type handler options
+==================
+<mapper>
+  <select id="jdbcType">SELECT id FROM users WHERE name = #{name,jdbcType=VARCHAR}</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (where
+          (keyword_where)
+          (binary_expression
+            (field
+              (identifier))
+            (literal))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Empty parameter placeholder
+==================
+<mapper>
+  <select id="empty">SELECT id FROM users WHERE id = #{}</select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (field
+                (identifier)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier))))
+        (where
+          (keyword_where)
+          (binary_expression
+            (field
+              (identifier))
+            (literal))))
+      (Name))
+    (MapperETag
+      (Name))))

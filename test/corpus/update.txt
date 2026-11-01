@@ -1,0 +1,208 @@
+==================
+Update set where
+==================
+<mapper>
+  <update id="rename">UPDATE users SET name = 'x' WHERE id = #{id}</update>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (UpdElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (update
+          (keyword_update)
+          (relation
+            (object_reference
+              (identifier)))
+          (keyword_set)
+          (assignment
+            (field
+              (identifier))
+            (literal)))
+        (where
+          (keyword_where)
+          (binary_expression
+            (field
+              (identifier))
+            (literal))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Update multiple assignments
+==================
+<mapper>
+  <update id="multi">UPDATE users SET name = 'x', version = version + 1, touched = NOW() WHERE id = 1</update>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (UpdElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (update
+          (keyword_update)
+          (relation
+            (object_reference
+              (identifier)))
+          (keyword_set)
+          (assignment
+            (field
+              (identifier))
+            (literal))
+          (assignment
+            (field
+              (identifier))
+            (binary_expression
+              (field
+                (identifier))
+              (literal)))
+          (assignment
+            (field
+              (identifier))
+            (invocation
+              (object_reference
+                (identifier)))))
+        (where
+          (keyword_where)
+          (binary_expression
+            (field
+              (identifier))
+            (literal))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Update with set element
+==================
+<mapper>
+  <update id="dynamicSet">
+    UPDATE users
+    <set>
+      <if test="name != null">name = #{name},</if>
+      <if test="age != null">age = #{age},</if>
+      updated_at = NOW()
+    </set>
+    WHERE id = #{id}
+  </update>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (UpdElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (update
+          (keyword_update)
+          (relation
+            (object_reference
+              (identifier)))))
+      (SetElem
+        (Name)
+        (IfElem
+          (Name)
+          (Attribute
+            (Name)
+            (AttValue))
+          (select_expression
+            (term
+              (binary_expression
+                (field
+                  (identifier))
+                (literal))))
+          (Name))
+        (IfElem
+          (Name)
+          (Attribute
+            (Name)
+            (AttValue))
+          (select_expression
+            (term
+              (binary_expression
+                (field
+                  (identifier))
+                (literal))))
+          (Name))
+        (select_expression
+          (term
+            (binary_expression
+              (field
+                (identifier))
+              (invocation
+                (object_reference
+                  (identifier))))))
+        (Name))
+      (where
+        (keyword_where)
+        (binary_expression
+          (field
+            (identifier))
+          (literal)))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Update wrapped in CDATA
+==================
+<mapper>
+  <update id="cdata"><![CDATA[ UPDATE users SET version = version + 1 WHERE id <= #{id} ]]></update>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (UpdElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (CDSect
+        (CDStart)
+        (CData
+          (statement
+            (update
+              (keyword_update)
+              (relation
+                (object_reference
+                  (identifier)))
+              (keyword_set)
+              (assignment
+                (field
+                  (identifier))
+                (binary_expression
+                  (field
+                    (identifier))
+                  (literal))))
+            (where
+              (keyword_where)
+              (binary_expression
+                (field
+                  (identifier))
+                (literal))))))
+      (Name))
+    (MapperETag
+      (Name))))

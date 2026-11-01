@@ -1,0 +1,85 @@
+==================
+Procedure call without arguments
+==================
+<mapper>
+  <procedure id="count">{call count_users()}</procedure>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (ProcElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (keyword_call)
+      (invocation
+        (object_reference
+          (identifier)))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Procedure call with arguments
+==================
+<mapper>
+  <procedure id="byDate">{call count_users(#{day})}</procedure>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (ProcElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (keyword_call)
+      (invocation
+        (object_reference
+          (identifier))
+        (literal))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Callable select with named argument
+==================
+<mapper>
+  <select id="callStats" statementType="CALLABLE">
+    {call compute_order_stats(#{customerId}, mode => 'full')}
+  </select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (keyword_call)
+        (invocation
+          (object_reference
+            (identifier))
+          (literal)
+          (named_argument
+            (identifier)
+            (literal))))
+      (Name))
+    (MapperETag
+      (Name))))

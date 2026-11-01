@@ -1,0 +1,144 @@
+==================
+Searched case expression
+==================
+<mapper>
+  <select id="searched">
+    SELECT CASE WHEN status = 'A' THEN 'active' ELSE 'other' END FROM users
+  </select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (case_expression
+                (keyword_case)
+                (keyword_when)
+                (binary_expression
+                  (field
+                    (identifier))
+                  (literal))
+                (keyword_then)
+                (literal)
+                (keyword_else)
+                (literal)
+                (keyword_end)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Searched case with multiple branches and alias
+==================
+<mapper>
+  <select id="branches">
+    SELECT CASE WHEN a = 1 THEN 'x' WHEN b = 2 THEN 'y' ELSE 'z' END AS label FROM users
+  </select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (case_expression
+                (keyword_case)
+                (keyword_when)
+                (binary_expression
+                  (field
+                    (identifier))
+                  (literal))
+                (keyword_then)
+                (literal)
+                (keyword_when)
+                (binary_expression
+                  (field
+                    (identifier))
+                  (literal))
+                (keyword_then)
+                (literal)
+                (keyword_else)
+                (literal)
+                (keyword_end))
+              (keyword_as)
+              (identifier))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Simple case expression
+==================
+<mapper>
+  <select id="simple">
+    SELECT CASE status WHEN 'A' THEN 'active' WHEN 'P' THEN 'pending' END FROM users
+  </select>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (SelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (select
+          (keyword_select)
+          (select_expression
+            (term
+              (case_expression
+                (keyword_case)
+                (field
+                  (identifier))
+                (keyword_when)
+                (literal)
+                (keyword_then)
+                (literal)
+                (keyword_when)
+                (literal)
+                (keyword_then)
+                (literal)
+                (keyword_end)))))
+        (from
+          (keyword_from)
+          (relation
+            (object_reference
+              (identifier)))))
+      (Name))
+    (MapperETag
+      (Name))))

@@ -1,0 +1,117 @@
+==================
+Delete from where
+==================
+<mapper>
+  <delete id="remove">DELETE FROM users WHERE id = #{id}</delete>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (DelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (delete
+          (keyword_delete))
+        (from
+          (keyword_from)
+          (object_reference
+            (identifier)))
+        (from
+          (keyword_where)
+          (binary_expression
+            (field
+              (identifier))
+            (literal))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Delete with in foreach
+==================
+<mapper>
+  <delete id="bulk">
+    DELETE FROM users WHERE id IN
+    <foreach collection="ids" item="item" open="(" separator="," close=")">#{item}</foreach>
+  </delete>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (DelElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (delete
+          (keyword_delete))
+        (from
+          (keyword_from)
+          (object_reference
+            (identifier)))
+        (from
+          (keyword_where)
+          (binary_expression
+            (field
+              (identifier))
+            (keyword_in)
+            (ForeachElem
+              (Name)
+              (Attribute
+                (Name)
+                (AttValue))
+              (Attribute
+                (Name)
+                (AttValue))
+              (Attribute
+                (Name)
+                (AttValue))
+              (Attribute
+                (Name)
+                (AttValue))
+              (Attribute
+                (Name)
+                (AttValue))
+              (select_expression
+                (term
+                  (literal)))
+              (Name)))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Truncate table
+==================
+<mapper>
+  <statement id="truncate">TRUNCATE TABLE users</statement>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (StmtElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (keyword_truncate)
+        (keyword_table)
+        (object_reference
+          (identifier)))
+      (Name))
+    (MapperETag
+      (Name))))

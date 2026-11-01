@@ -1,0 +1,83 @@
+==================
+XML declaration
+==================
+<?xml version="1.0" encoding="UTF-8"?>
+<mapper></mapper>
+---
+
+(document
+  (XMLDecl)
+  (Mapper
+    (MapperSTag
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+PUBLIC document type declaration
+==================
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper></mapper>
+---
+
+(document
+  (doctypedecl
+    (Name)
+    (ExternalID
+      (PubidLiteral)
+      (SystemLiteral
+        (URI))))
+  (Mapper
+    (MapperSTag
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+SYSTEM document type declaration
+==================
+<!DOCTYPE mapper SYSTEM "mybatis-3-mapper.dtd">
+<mapper></mapper>
+---
+
+(document
+  (doctypedecl
+    (Name)
+    (ExternalID
+      (SystemLiteral
+        (URI))))
+  (Mapper
+    (MapperSTag
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Top-level comment
+==================
+<!-- a commented-out statement stays a comment -->
+<mapper></mapper>
+---
+
+(document
+  (Comment)
+  (Mapper
+    (MapperSTag
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Processing instruction
+==================
+<?mybatis generated?>
+<mapper></mapper>
+---
+
+(document
+  (PI)
+  (Mapper
+    (MapperSTag
+      (Name))
+    (MapperETag
+      (Name))))

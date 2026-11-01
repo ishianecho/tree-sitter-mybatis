@@ -1,0 +1,320 @@
+==================
+Insert values
+==================
+<mapper>
+  <insert id="insertUser">INSERT INTO users (id, name) VALUES (#{id}, #{name})</insert>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (InsElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (insert
+          (keyword_insert)
+          (keyword_into)
+          (object_reference
+            (identifier))
+          (list
+            (column
+              (identifier))
+            (column
+              (identifier)))
+          (keyword_values)
+          (list
+            (literal)
+            (literal))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Insert without column list
+==================
+<mapper>
+  <insert id="noColumns">INSERT INTO users VALUES (1, 'a')</insert>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (InsElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (insert
+          (keyword_insert)
+          (keyword_into)
+          (object_reference
+            (identifier))
+          (keyword_values)
+          (list
+            (literal)
+            (literal))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Multi-row insert
+==================
+<mapper>
+  <insert id="multiRow">INSERT INTO users (id) VALUES (1), (2), (3)</insert>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (InsElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (insert
+          (keyword_insert)
+          (keyword_into)
+          (object_reference
+            (identifier))
+          (list
+            (column
+              (identifier)))
+          (keyword_values)
+          (list
+            (literal))
+          (list
+            (literal))
+          (list
+            (literal))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Upsert with on duplicate key update
+==================
+<mapper>
+  <insert id="upsert">
+    INSERT INTO users (id, name) VALUES (#{id}, #{name})
+    ON DUPLICATE KEY UPDATE name = VALUES(name), updated_at = NOW()
+  </insert>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (InsElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (insert
+          (keyword_insert)
+          (keyword_into)
+          (object_reference
+            (identifier))
+          (list
+            (column
+              (identifier))
+            (column
+              (identifier)))
+          (keyword_values)
+          (list
+            (literal)
+            (literal))
+          (keyword_on)
+          (keyword_duplicate)
+          (keyword_key)
+          (keyword_update)
+          (assignment
+            (field
+              (identifier))
+            (invocation
+              (object_reference
+                (identifier))
+              (field
+                (identifier))))
+          (assignment
+            (field
+              (identifier))
+            (invocation
+              (object_reference
+                (identifier))))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Insert select
+==================
+<mapper>
+  <insert id="insertSelect">
+    INSERT INTO users_archive (id, name) SELECT id, name FROM users WHERE status = 'archived'
+  </insert>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (InsElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (insert
+          (keyword_insert)
+          (keyword_into)
+          (object_reference
+            (identifier))
+          (list
+            (column
+              (identifier))
+            (column
+              (identifier)))
+          (select
+            (keyword_select)
+            (select_expression
+              (term
+                (field
+                  (identifier)))
+              (term
+                (field
+                  (identifier)))))
+          (from
+            (keyword_from)
+            (relation
+              (object_reference
+                (identifier))))
+          (where
+            (keyword_where)
+            (binary_expression
+              (field
+                (identifier))
+              (literal)))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Insert values from foreach
+==================
+<mapper>
+  <insert id="batch">
+    INSERT INTO users (name) VALUES
+    <foreach collection="names" item="name" separator=",">(#{name})</foreach>
+  </insert>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (InsElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (statement
+        (insert
+          (keyword_insert)
+          (keyword_into)
+          (object_reference
+            (identifier))
+          (list
+            (column
+              (identifier)))
+          (keyword_values)
+          (ForeachElem
+            (Name)
+            (Attribute
+              (Name)
+              (AttValue))
+            (Attribute
+              (Name)
+              (AttValue))
+            (Attribute
+              (Name)
+              (AttValue))
+            (select_expression
+              (term
+                (list
+                  (literal))))
+            (Name))))
+      (Name))
+    (MapperETag
+      (Name))))
+
+==================
+Insert with selectKey
+==================
+<mapper>
+  <insert id="keygen">
+    <selectKey keyProperty="id" resultType="int" order="BEFORE">SELECT next_id()</selectKey>
+    INSERT INTO users (id) VALUES (#{id})
+  </insert>
+</mapper>
+---
+
+(document
+  (Mapper
+    (MapperSTag
+      (Name))
+    (InsElem
+      (Name)
+      (Attribute
+        (Name)
+        (AttValue))
+      (SelKeyElem
+        (Name)
+        (Attribute
+          (Name)
+          (AttValue))
+        (Attribute
+          (Name)
+          (AttValue))
+        (Attribute
+          (Name)
+          (AttValue))
+        (statement
+          (select
+            (keyword_select)
+            (select_expression
+              (term
+                (invocation
+                  (object_reference
+                    (identifier)))))))
+        (Name))
+      (statement
+        (insert
+          (keyword_insert)
+          (keyword_into)
+          (object_reference
+            (identifier))
+          (list
+            (column
+              (identifier)))
+          (keyword_values)
+          (list
+            (literal))))
+      (Name))
+    (MapperETag
+      (Name))))
