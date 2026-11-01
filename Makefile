@@ -95,5 +95,6 @@ clean:
 
 test:
 	$(TS) test
+	$(TS) parse -q test/examples/*.xml
 
 .PHONY: all install uninstall clean test

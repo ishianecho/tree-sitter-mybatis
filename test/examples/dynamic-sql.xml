@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mapper namespace="com.example.mapper.OrderMapper">
+
+  <sql id="orderColumns">o.id, o.amount, o.created_at</sql>
+
+  <select id="findOrders" resultType="Order">
+    SELECT
+    <choose>
+      <when test="verbose">o.*, o.note</when>
+      <otherwise><include refid="orderColumns"/></otherwise>
+    </choose>
+    FROM orders o
+    LEFT JOIN customers c ON o.customer_id = c.id
+    LEFT JOIN addresses a ON c.address_id = a.id
+    <where>
+      <if test="minAmount != null">AND o.amount &gt;= #{minAmount}</if>
+      <if test="maxAmount != null">AND o.amount &lt;= #{maxAmount}</if>
+      <if test="customerId != null">AND o.customer_id = #{customerId}</if>
+      <if test="statuses != null">
+        AND o.status IN
+        <foreach collection="statuses" item="st" open="(" separator="," close=")">#{st}</foreach>
+      </if>
+    </where>
+    GROUP BY o.id
+    HAVING SUM(o.amount) &gt; #{threshold}
+    ORDER BY o.created_at DESC
+    LIMIT 100 OFFSET #{pageStart}
+  </select>
+
+  <select id="searchByNote" resultType="Order">
+    <bind name="pattern" value="'%' + note + '%'"/>
+    SELECT * FROM orders WHERE note LIKE #{pattern}
+  </select>
+
+  <update id="applyDiscount">
+    UPDATE orders
+    <set>
+      <if test="discount != null">amount = amount * (1 - #{discount}),</if>
+      <if test="updatedBy != null">updated_by = #{updatedBy},</if>
+      updated_at = NOW()
+    </set>
+    WHERE id = #{id}
+  </update>
+
+  <delete id="purgeOrders">
+    <![CDATA[
+      DELETE FROM orders WHERE created_at < #{cutoff} AND amount <= 0
+    ]]>
+  </delete>
+
+  <select id="distinctCities" resultType="string">
+    SELECT DISTINCT city FROM customers ORDER BY city
+  </select>
+
+  <select id="withRowNumber" resultType="map">
+    SELECT * FROM (
+      SELECT id, ROW_NUMBER() OVER (PARTITION BY customer_id ORDER BY created_at) AS rn
+      FROM orders
+    ) ranked WHERE ranked.rn &lt;= 3
+  </select>
+
+  <select id="callStats" statementType="CALLABLE">
+    {call compute_order_stats(#{customerId}, mode => 'full')}
+  </select>
+
+</mapper>

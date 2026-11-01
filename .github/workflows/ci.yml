@@ -28,6 +28,9 @@ jobs:
       - name: Run grammar tests
         run: tree-sitter test
 
+      - name: Parse example documents
+        run: tree-sitter parse -q test/examples/*.xml
+
       - name: Check generated files
         run: git diff --exit-code -- src/grammar.json src/node-types.json src/parser.c
 

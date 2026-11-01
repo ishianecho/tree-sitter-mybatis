@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.UserMapper">
+
+  <resultMap id="userResultMap" type="com.example.User">
+    <id property="id" column="user_id"/>
+    <result property="name" column="user_name"/>
+    <association property="department" javaType="com.example.Department">
+      <id property="id" column="dept_id"/>
+      <result property="title" column="dept_title"/>
+    </association>
+    <collection property="roles" ofType="com.example.Role">
+      <id property="id" column="role_id"/>
+      <result property="name" column="role_name"/>
+    </collection>
+  </resultMap>
+
+  <cache eviction="LRU" flushInterval="60000" size="512" readOnly="true"/>
+  <cache-ref namespace="com.example.mapper.RoleMapper"/>
+
+  <sql id="baseColumns">id, name, status, created_at</sql>
+
+  <select id="findPage" resultMap="userResultMap">
+    SELECT <include refid="baseColumns"/>
+    FROM users
+    WHERE status = 'active'
+    ORDER BY created_at DESC
+    LIMIT #{offset}, #{pageSize}
+  </select>
+
+  <select id="countByNamePrefix" resultType="long">
+    SELECT COUNT(*) FROM users WHERE name LIKE CONCAT('%', #{prefix}, '%')
+  </select>
+
+  <select id="findSorted" resultType="User">
+    SELECT id, name FROM users
+    <choose>
+      <when test="sortField == 'name'">ORDER BY name ASC</when>
+      <otherwise>ORDER BY id DESC</otherwise>
+    </choose>
+  </select>
+
+  <select id="findByIds" resultType="User">
+    SELECT * FROM users WHERE id IN
+    <foreach collection="ids" item="item" open="(" separator="," close=")">#{item}</foreach>
+  </select>
+
+  <select id="existsByEmail" resultType="boolean">
+    SELECT COUNT(1) FROM users WHERE email = #{email}
+  </select>
+
+  <select id="findByCreatedRange" resultType="User">
+    SELECT * FROM users
+    WHERE created_at BETWEEN #{start} AND #{end}
+      AND deleted = false
+  </select>
+
+  <select id="findActiveAdults" resultType="User">
+    SELECT * FROM users WHERE age &gt;= 18 AND status &lt;&gt; 'blocked'
+  </select>
+
+  <insert id="insertUser" parameterType="com.example.User"
+          keyProperty="id" useGeneratedKeys="true">
+    INSERT INTO users (name, email, status)
+    VALUES (#{name}, #{email,jdbcType=VARCHAR}, #{status})
+  </insert>
+
+  <insert id="upsertUser">
+    INSERT INTO users (id, name) VALUES (#{id}, #{name})
+    ON DUPLICATE KEY UPDATE name = VALUES(name), updated_at = NOW()
+  </insert>
+
+  <insert id="insertBatch">
+    INSERT INTO users (name) VALUES
+    <foreach collection="names" item="name" separator=",">(#{name})</foreach>
+  </insert>
+
+  <insert id="copyArchivedUsers">
+    INSERT INTO users_archive (id, name)
+    SELECT id, name FROM users WHERE status = 'archived'
+  </insert>
+
+  <update id="touchAll">
+    UPDATE users SET version = version + 1 WHERE last_seen &lt; #{cutoff}
+  </update>
+
+  <update id="renameInBulk">
+    UPDATE users u SET u.name = CONCAT(u.name, '_x') WHERE u.id IN (SELECT id FROM stale_users)
+  </update>
+
+  <delete id="deleteByIds">
+    DELETE FROM users WHERE id IN
+    <foreach collection="ids" item="item" open="(" separator="," close=")">#{item}</foreach>
+  </delete>
+
+  <select id="groupByStatus" resultType="map">
+    SELECT status, COUNT(*) AS total FROM users GROUP BY status HAVING COUNT(*) &gt; 5
+  </select>
+
+  <select id="searchFlexible" resultType="User">
+    SELECT * FROM users
+    <where>
+      <if test="name != null">AND name LIKE CONCAT('%', #{name}, '%')</if>
+      <if test="minAge != null">AND age &gt;= #{minAge}</if>
+      <if test="statusList != null and statusList.size() > 0">
+        AND status IN
+        <foreach collection="statusList" item="s" open="(" separator="," close=")">#{s}</foreach>
+      </if>
+    </where>
+  </select>
+
+  <select id="unionActiveAndPending" resultType="User">
+    SELECT id, name FROM users WHERE status = 'active'
+    UNION ALL
+    SELECT id, name FROM users WHERE status = 'pending'
+  </select>
+
+  <select id="caseExpression" resultType="map">
+    SELECT id,
+      CASE WHEN status = 'A' THEN 'active' WHEN status = 'P' THEN 'pending' ELSE 'other' END AS label
+    FROM users
+  </select>
+
+  <select id="subqueryInFrom" resultType="map">
+    SELECT t.id, t.total FROM (SELECT id, COUNT(*) AS total FROM orders GROUP BY id) t
+  </select>
+
+  <select id="notInSubquery" resultType="User">
+    SELECT * FROM users WHERE id NOT IN (SELECT user_id FROM blocked_users)
+  </select>
+
+  <select id="escapeDemo" resultType="User">
+    SELECT * FROM users WHERE age <![CDATA[ < ]]> 100 AND note = 'it''s fine'
+  </select>
+
+</mapper>
