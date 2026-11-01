@@ -203,31 +203,54 @@
 
 ; SQL keywords
 [
+  (keyword_all)
   (keyword_and)
   (keyword_as)
+  (keyword_asc)
+  (keyword_between)
+  (keyword_by)
   (keyword_call)
+  (keyword_case)
   (keyword_current_timestamp)
   (keyword_delete)
+  (keyword_desc)
   (keyword_distinct)
+  (keyword_duplicate)
+  (keyword_else)
+  (keyword_end)
+  (keyword_false)
   (keyword_from)
   (keyword_full)
+  (keyword_group)
+  (keyword_having)
+  (keyword_in)
   (keyword_inner)
   (keyword_insert)
   (keyword_into)
   (keyword_is)
   (keyword_join)
   (keyword_left)
+  (keyword_like)
+  (keyword_limit)
   (keyword_not)
   (keyword_null)
+  (keyword_offset)
   (keyword_on)
   (keyword_or)
+  (keyword_order)
+  (keyword_over)
+  (keyword_partition)
   (keyword_right)
   (keyword_select)
   (keyword_set)
   (keyword_table)
+  (keyword_then)
   (keyword_truncate)
+  (keyword_true)
+  (keyword_union)
   (keyword_update)
   (keyword_values)
+  (keyword_when)
   (keyword_where)
 ] @keyword
 
@@ -250,7 +273,16 @@
     ">="
     ">"
     "<>"
+    "=>"
+    "&gt;="
+    "&gt;"
+    "&lt;="
+    "&lt;&gt;"
+    "&lt;"
   ] @operator)
+
+(named_argument
+  name: (identifier) @variable.parameter)
 
 [
   "("
