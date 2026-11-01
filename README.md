@@ -1,20 +1,25 @@
 # tree-sitter-mybatis
 
-Tree-sitter grammar for MyBatis and iBATIS mapper files.
+A tree-sitter grammar for MyBatis and iBATIS mapper files.
 
-This project is in early development and may change.
-
-## Startup
+## Installation
 
 ```sh
-cargo install tree-sitter-cli
+git clone https://github.com/ishi-o/tree-sitter-mybatis.git
+cd tree-sitter-mybatis
 npm install
+tree-sitter build -o mybatis.so
 ```
 
 ## Development
 
 ```sh
 tree-sitter generate
-tree-sitter test -u
-tree-sitter build
+make test
 ```
+
+## References
+
+- [MyBatis — Mapper XML Files](https://mybatis.org/mybatis-3/xml.html)
+- [MyBatis — Dynamic SQL](https://mybatis.org/mybatis-3/dynamic-sql.html)
+- [iBATIS — SqlMaps 2 Developer Guide](https://ibatis.apache.org/docs/en/pdf/iBATIS-SqlMaps-2_en.pdf)
