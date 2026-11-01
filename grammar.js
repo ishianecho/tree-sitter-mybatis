@@ -30,9 +30,11 @@ const SQL_KEYWORDS = [
   "desc",
   "distinct",
   "drop",
+  "duplicate",
   "else",
   "end",
   "exists",
+  "false",
   "foreign",
   "from",
   "full",
@@ -55,6 +57,8 @@ const SQL_KEYWORDS = [
   "or",
   "order",
   "outer",
+  "over",
+  "partition",
   "primary",
   "references",
   "returning",
@@ -64,6 +68,7 @@ const SQL_KEYWORDS = [
   "table",
   "then",
   "truncate",
+  "true",
   "union",
   "unique",
   "update",
@@ -165,6 +170,9 @@ function mapperContent($) {
     $.statement,
     $.from,
     $.where,
+    $.group_by,
+    $.order_by,
+    $.limit,
     $.select_expression,
     $.SelElem,
     $.InsElem,
@@ -189,11 +197,14 @@ function mapperContent($) {
  */
 function sqlFragmentContent($) {
   return choice(
-    $.select_expression,
+    alias($._fragment_expression, $.select_expression),
     $.invocation,
     $.list,
     $.keyword_and,
     $.keyword_or,
+    $.order_by,
+    $.group_by,
+    $.limit,
     $.IncludeElem,
     dynamicContent($),
     $.CDSect,
@@ -211,10 +222,12 @@ module.exports = grammar({
     [$.object_reference, $._qualified_field],
     [$.term],
     [$.join],
-    [$._select_statement],
     [$._update_statement],
     [$.relation],
     [$._delete_statement],
+    [$._select_core],
+    [$.set_operation],
+    [$._fragment_expression],
   ],
 
   rules: {
@@ -336,20 +349,65 @@ module.exports = grammar({
         $._update_statement,
         $._delete_statement,
         $._truncate_statement,
+        $._procedure_call,
       ),
     _procedure_call: ($) => seq("{", $.keyword_call, $.invocation, "}"),
-    _select_statement: ($) =>
+    _select_statement: ($) => seq($._select_core, optional(";")),
+    _select_core: ($) =>
       prec(
         2,
-        seq($.select, optional($.from), optional($.where), optional(";")),
+        seq(
+          $.select,
+          optional($.from),
+          optional($.where),
+          optional($.group_by),
+          optional($.order_by),
+          optional($.limit),
+          repeat($.set_operation),
+        ),
+      ),
+    set_operation: ($) =>
+      seq(
+        $.keyword_union,
+        optional($.keyword_all),
+        $.select,
+        optional($.from),
+        optional($.where),
+        optional($.group_by),
+        optional($.order_by),
+        optional($.limit),
+      ),
+    group_by: ($) =>
+      seq(
+        $.keyword_group,
+        $.keyword_by,
+        commaList(alias($._qualified_field, $.field)),
+        optional(seq($.keyword_having, $._expression)),
+      ),
+    order_by: ($) =>
+      seq($.keyword_order, $.keyword_by, commaList($.ordering_term)),
+    ordering_term: ($) =>
+      seq(
+        alias($._qualified_field, $.field),
+        optional(choice($.keyword_asc, $.keyword_desc)),
+      ),
+    limit: ($) =>
+      choice(
+        seq(
+          $.keyword_limit,
+          $._expression,
+          optional(seq($.keyword_offset, $._expression)),
+        ),
+        seq($.keyword_limit, $._expression, ",", $._expression),
       ),
     select: ($) =>
       seq(
         $.keyword_select,
         optional($.keyword_distinct),
-        choice($.select_expression, $.IncludeElem),
+        choice($.select_expression, $.IncludeElem, dynamicContent($)),
       ),
     select_expression: ($) => commaList($.term),
+    _fragment_expression: ($) => seq(commaList($.term), optional(",")),
     term: ($) =>
       seq(
         field("value", choice($.all_fields, $._expression)),
@@ -358,7 +416,12 @@ module.exports = grammar({
     all_fields: ($) => seq(optional(seq($.object_reference, ".")), "*"),
     _alias: ($) => seq(optional($.keyword_as), field("alias", $.identifier)),
     from: ($) => seq($.keyword_from, commaList($.relation), repeat($.join)),
-    relation: ($) => seq($.object_reference, optional($._alias)),
+    relation: ($) =>
+      choice(
+        seq($.object_reference, optional($._alias)),
+        seq($.subquery, $._alias),
+      ),
+    subquery: ($) => seq("(", $._select_core, ")"),
     join: ($) =>
       seq(
         optional(
@@ -383,15 +446,33 @@ module.exports = grammar({
         optional($.keyword_into),
         $.object_reference,
         optional(alias($._column_list, $.list)),
-        $.keyword_values,
-        commaList($.list),
+        choice(
+          seq(
+            $.keyword_values,
+            commaList(choice($.list, $.ForeachElem)),
+          ),
+          $._select_core,
+        ),
+        optional($._on_duplicate_key_update),
+      ),
+    _on_duplicate_key_update: ($) =>
+      seq(
+        $.keyword_on,
+        $.keyword_duplicate,
+        $.keyword_key,
+        $.keyword_update,
+        commaList($.assignment),
       ),
     _column_list: ($) => parenList(alias($._column, $.column)),
     _column: ($) => choice($.identifier, alias($._literal_string, $.literal)),
 
     _update_statement: ($) => seq($.update, optional($.where), optional(";")),
     update: ($) =>
-      seq($.keyword_update, $.relation, $.keyword_set, commaList($.assignment)),
+      seq(
+        $.keyword_update,
+        $.relation,
+        optional(seq($.keyword_set, commaList($.assignment))),
+      ),
     assignment: ($) =>
       seq(
         field("left", alias($._qualified_field, $.field)),
@@ -424,7 +505,22 @@ module.exports = grammar({
           $.list,
           $.invocation,
           $.binary_expression,
+          $.unary_expression,
+          $.case_expression,
+          $.subquery,
+          prec(-1, $.ForeachElem),
         ),
+      ),
+    unary_expression: ($) => prec(4, seq($.keyword_not, $._expression)),
+    case_expression: ($) =>
+      seq(
+        $.keyword_case,
+        optional($._expression),
+        repeat1(
+          seq($.keyword_when, $._expression, $.keyword_then, $._expression),
+        ),
+        optional(seq($.keyword_else, $._expression)),
+        $.keyword_end,
       ),
     object_reference: ($) =>
       field(
@@ -444,6 +540,8 @@ module.exports = grammar({
           $._literal_string,
           $._mybatis_parameter,
           $.keyword_null,
+          $.keyword_true,
+          $.keyword_false,
           $.keyword_current_timestamp,
         ),
       ),
@@ -494,6 +592,14 @@ module.exports = grammar({
             ">=",
             "!=",
             "<>",
+            "&gt;=",
+            "&gt;",
+            "&lt;=",
+            "&lt;&gt;",
+            "&lt;",
+            new RustRegex(
+              "<!\\[CDATA\\[[ \\t\\r\\n]*(<=|>=|<>|<|>|!=)[ \\t\\r\\n]*\\]\\]>",
+            ),
             "+",
             "-",
             "*",
@@ -502,13 +608,45 @@ module.exports = grammar({
             "||",
             $.keyword_and,
             $.keyword_or,
+            $.keyword_like,
+            $.keyword_between,
+            $.keyword_in,
+            seq($.keyword_not, $.keyword_in),
+            seq($.keyword_not, $.keyword_like),
             seq($.keyword_is, optional($.keyword_not)),
           ),
           field("right", $._expression),
         ),
       ),
     invocation: ($) =>
-      seq($.object_reference, seq("(", optional($._expression), ")")),
+      prec.dynamic(
+        1,
+        seq(
+          $.object_reference,
+          seq(
+            "(",
+            optional(commaList(choice($.all_fields, $._expression, $.named_argument))),
+            ")",
+          ),
+          optional($.over_clause),
+        ),
+      ),
+    named_argument: ($) =>
+      seq(field("name", $.identifier), "=>", $._expression),
+    over_clause: ($) =>
+      seq(
+        $.keyword_over,
+        "(",
+        optional($.partition_by),
+        optional($.order_by),
+        ")",
+      ),
+    partition_by: ($) =>
+      seq(
+        $.keyword_partition,
+        $.keyword_by,
+        commaList(alias($._qualified_field, $.field)),
+      ),
 
     CDSect: ($) => seq($.CDStart, optional($.CData), "]]>"),
     CDStart: (_) => seq("<![", "CDATA", "["),
