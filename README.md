@@ -5,7 +5,7 @@ A tree-sitter grammar for MyBatis and iBATIS mapper files.
 ## Installation
 
 ```sh
-git clone https://github.com/ishi-o/tree-sitter-mybatis.git
+git clone https://github.com/ishianecho/tree-sitter-mybatis.git
 cd tree-sitter-mybatis
 npm install
 tree-sitter build -o mybatis.so

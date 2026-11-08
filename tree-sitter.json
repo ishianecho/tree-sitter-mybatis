@@ -20,13 +20,13 @@
     "description": "Tree-sitter grammar for MyBatis and iBATIS mapper files",
     "authors": [
       {
-        "name": "ishi-o",
+        "name": "ishianecho",
         "email": "ishio.liu@outlook.com",
-        "url": "https://github.com/ishi-o"
+        "url": "https://github.com/ishianecho"
       }
     ],
     "links": {
-      "repository": "https://github.com/ishi-o/tree-sitter-mybatis"
+      "repository": "https://github.com/ishianecho/tree-sitter-mybatis"
     }
   },
   "bindings": {

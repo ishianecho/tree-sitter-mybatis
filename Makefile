@@ -3,7 +3,7 @@ $(error Windows is not supported)
 endif
 
 LANGUAGE_NAME := tree-sitter-mybatis
-HOMEPAGE_URL := https://github.com/ishi-o/tree-sitter-mybatis
+HOMEPAGE_URL := https://github.com/ishianecho/tree-sitter-mybatis
 VERSION := 0.1.0
 
 # repository

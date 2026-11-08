@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.13)
 project(tree-sitter-mybatis
         VERSION "0.1.0"
         DESCRIPTION "Treesitter parser for mybatis/ibatis sql"
-        HOMEPAGE_URL "https://github.com/ishi-o/tree-sitter-mybatis"
+        HOMEPAGE_URL "https://github.com/ishianecho/tree-sitter-mybatis"
         LANGUAGES C)
 
 option(BUILD_SHARED_LIBS "Build using shared libraries" ON)

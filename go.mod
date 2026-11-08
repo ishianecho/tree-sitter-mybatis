@@ -1,4 +1,4 @@
-module github.com/ishi-o/tree-sitter-mybatis
+module github.com/ishianecho/tree-sitter-mybatis
 
 go 1.22
 

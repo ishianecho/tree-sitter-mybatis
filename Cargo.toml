@@ -2,12 +2,12 @@
 name = "tree-sitter-mybatis"
 description = "Tree-sitter grammar for MyBatis and iBATIS mapper files"
 version = "0.1.0"
-authors = ["ishi-o <ishio.liu@outlook.com>"]
+authors = ["ishianecho <ishio.liu@outlook.com>"]
 license = "MIT"
 readme = "README.md"
 keywords = ["tree-sitter", "mybatis", "ibatis", "sql", "xml"]
 categories = ["parser-implementations", "parsing", "text-editors"]
-repository = "https://github.com/ishi-o/tree-sitter-mybatis"
+repository = "https://github.com/ishianecho/tree-sitter-mybatis"
 edition = "2021"
 autoexamples = false
 

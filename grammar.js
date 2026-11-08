@@ -1,6 +1,6 @@
 /**
  * @file Tree-sitter grammar for MyBatis and iBATIS mapper files.
- * @author ishi-o <ishio.liu@outlook.com>
+ * @author ishianecho <ishio.liu@outlook.com>
  * @license MIT
  */
 
